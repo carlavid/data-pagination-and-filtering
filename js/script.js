@@ -3,9 +3,7 @@ Treehouse Techdegree:
 FSJS Project 2 - Data Pagination and Filtering
 */
 
-// ELEMENT SELECTORS
-// Access ul within pagination div
-const paginationList = document.querySelector(".pagination").firstElementChild;
+
 const studentsPerPage = 9;
 
 /*
@@ -16,8 +14,8 @@ function showPage(list, page) {
    const start = (page * studentsPerPage) - studentsPerPage;
    const end = (page * studentsPerPage);
    // Access ul w/ student-list class
-   const ul = document.querySelector(".student-list");
-   ul.innerHTML = "";
+   const studentList = document.querySelector(".student-list");
+   studentList.innerHTML = "";
 
    for (let i = 0; i < list.length; i++) {
       if (i >= start && i < end) {
@@ -32,7 +30,7 @@ function showPage(list, page) {
                <span class="date">Joined ${list[i].registered.date}</span>
             </div>
          </li>`;
-         ul.insertAdjacentHTML("beforeend", html);
+         studentList.insertAdjacentHTML("beforeend", html);
       }
    }
 }
@@ -42,8 +40,34 @@ function showPage(list, page) {
 Create the `addPagination` function
 This function will create and insert/append the elements needed for the pagination buttons
 */
+function addPagination(list) {
+   const numberOfButtons = Math.ceil(list.length / studentsPerPage);
+   const linkList = document.querySelector(".link-list");
+   linkList.innerHTML = "";
+
+   for (let i = 1; i <= numberOfButtons; i++) {
+      const html = `
+         <li>
+            <button>${i}</button>
+         </li>`;
+      linkList.insertAdjacentHTML("beforeend", html);
+   }
+   linkList.querySelector("button").classList.add("active");
+
+   linkList.addEventListener("click", (e) => {
+      const activeButton = linkList.querySelector(".active");
+      const buttonClicked = e.target.closest("button");
+
+      if (buttonClicked) {
+         activeButton.classList.remove("active");
+         buttonClicked.classList.add("active");
+         showPage(data, buttonClicked.innerHTML);
+      }
+   })
+}
 
 
 // Call functions
 showPage(data, 1);
+addPagination(data);
 
