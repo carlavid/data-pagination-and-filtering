@@ -3,7 +3,10 @@ Treehouse Techdegree:
 FSJS Project 2 - Data Pagination and Filtering
 */
 
-
+// ELEMENT SELECTORS
+const studentList = document.querySelector(".student-list");
+const linkList = document.querySelector(".link-list");
+const header = document.querySelector(".header");
 const studentsPerPage = 9;
 
 /*
@@ -14,7 +17,6 @@ function showPage(list, page) {
    const start = (page * studentsPerPage) - studentsPerPage;
    const end = (page * studentsPerPage);
    // Access ul w/ student-list class
-   const studentList = document.querySelector(".student-list");
    studentList.innerHTML = "";
 
    for (let i = 0; i < list.length; i++) {
@@ -42,7 +44,6 @@ This function will create and insert/append the elements needed for the paginati
 */
 function addPagination(list) {
    const numberOfButtons = Math.ceil(list.length / studentsPerPage);
-   const linkList = document.querySelector(".link-list");
    linkList.innerHTML = "";
 
    for (let i = 1; i <= numberOfButtons; i++) {
@@ -71,3 +72,35 @@ function addPagination(list) {
 showPage(data, 1);
 addPagination(data);
 
+// Add search component 
+const searchForm = `
+         <label for="search" class="student-search">
+            <span>Search by name</span>
+            <input id="search" placeholder="Search by name...">
+            <button type="button"><img src="img/icn-search.svg" alt="Search icon"></button>
+         </label>`;
+
+header.insertAdjacentHTML("beforeend", searchForm);
+
+const studentSearch = document.querySelector("#search");
+
+studentSearch.addEventListener("keyup", () => {
+   const newData = [];
+   const userInput = studentSearch.value.toLowerCase();
+
+   for (let i = 0; i < data.length; i++) {
+      const studentName = `${data[i].name.first.toLowerCase()} ${data[i].name.last.toLowerCase()}`;
+
+      if (studentName.includes(userInput)) {
+         newData.push(data[i]);
+      }
+   }
+   if (newData.length > 0) {
+      addPagination(newData);
+      showPage(newData, 1);
+   } else {
+      const html = "<h3>No Results Found...</h3>";
+      studentList.innerHTML = html;
+      linkList.innerHTML = "";
+   }
+})
