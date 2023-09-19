@@ -18,7 +18,6 @@ const studentsPerPage = 9;
 function showPage(list, page) {
    const start = (page * studentsPerPage) - studentsPerPage;
    const end = (page * studentsPerPage);
-   // Access ul w/ student-list class
    studentList.innerHTML = "";
 
    for (let i = 0; i < list.length; i++) {
@@ -40,33 +39,32 @@ function showPage(list, page) {
 };
 
 
+
 /**
  * Function will create and insert/append the elements needed for the pagination buttons
  * @param {list} - the array of student objects 
  */
 function addPagination(list) {
-   const numberOfButtons = Math.ceil(list.length / studentsPerPage);
+   const numOfPages = Math.ceil(list.length / studentsPerPage);
    linkList.innerHTML = "";
 
-   for (let i = 1; i <= numberOfButtons; i++) {
+   for (let i = 1; i <= numOfPages; i++) {
       const html = `
          <li>
-            <button>${i}</button>
+            <button type="button">${i}</button>
          </li>`;
       linkList.insertAdjacentHTML("beforeend", html);
    }
-   linkList.querySelector("button").classList.add("active");
+   linkList.querySelector("button").className = "active";
 
    linkList.addEventListener("click", (e) => {
       const activeButton = linkList.querySelector(".active");
       const buttonClicked = e.target.closest("button");
 
-      if (activeButton && buttonClicked) {
-         activeButton.classList.remove("active");
-      }
       if (buttonClicked) {
+         activeButton.classList.remove("active");
          buttonClicked.classList.add("active");
-         showPage(data, buttonClicked.innerHTML);
+         showPage(list, buttonClicked.innerHTML);
       }
    })
 };
@@ -101,10 +99,10 @@ studentSearch.addEventListener("keyup", () => {
          newData.push(data[i]);
       }
    }
-   
+
    if (newData.length > 0) {
-      addPagination(newData);
       showPage(newData, 1);
+      addPagination(newData);
    } else {
       const html = "<h3>No Results Found...</h3>";
       studentList.innerHTML = html;
