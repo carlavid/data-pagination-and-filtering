@@ -3,16 +3,18 @@ Treehouse Techdegree:
 FSJS Project 2 - Data Pagination and Filtering
 */
 
-// ELEMENT SELECTORS
+// Global constants 
 const studentList = document.querySelector(".student-list");
 const linkList = document.querySelector(".link-list");
 const header = document.querySelector(".header");
 const studentsPerPage = 9;
 
-/*
-Create the `showPage` function
-This function will create and insert/append the elements needed to display a "page" of nine students
-*/
+
+/**
+ * Function will create and insert/append the elements needed to display a "page" of nine students
+ * @param {list} - the array of student objects 
+ * @param {number} - the requested page number
+ */
 function showPage(list, page) {
    const start = (page * studentsPerPage) - studentsPerPage;
    const end = (page * studentsPerPage);
@@ -35,13 +37,13 @@ function showPage(list, page) {
          studentList.insertAdjacentHTML("beforeend", html);
       }
    }
-}
+};
 
 
-/*
-Create the `addPagination` function
-This function will create and insert/append the elements needed for the pagination buttons
-*/
+/**
+ * Function will create and insert/append the elements needed for the pagination buttons
+ * @param {list} - the array of student objects 
+ */
 function addPagination(list) {
    const numberOfButtons = Math.ceil(list.length / studentsPerPage);
    linkList.innerHTML = "";
@@ -59,20 +61,23 @@ function addPagination(list) {
       const activeButton = linkList.querySelector(".active");
       const buttonClicked = e.target.closest("button");
 
-      if (buttonClicked) {
+      if (activeButton && buttonClicked) {
          activeButton.classList.remove("active");
+      }
+      if (buttonClicked) {
          buttonClicked.classList.add("active");
          showPage(data, buttonClicked.innerHTML);
       }
    })
-}
+};
 
 
 // Call functions
 showPage(data, 1);
 addPagination(data);
 
-// Add search component 
+
+// Create and add search bar in header
 const searchForm = `
          <label for="search" class="student-search">
             <span>Search by name</span>
@@ -82,8 +87,9 @@ const searchForm = `
 
 header.insertAdjacentHTML("beforeend", searchForm);
 
-const studentSearch = document.querySelector("#search");
 
+// Add search functionality & pagination for search results
+const studentSearch = document.querySelector("#search");
 studentSearch.addEventListener("keyup", () => {
    const newData = [];
    const userInput = studentSearch.value.toLowerCase();
@@ -95,6 +101,7 @@ studentSearch.addEventListener("keyup", () => {
          newData.push(data[i]);
       }
    }
+   
    if (newData.length > 0) {
       addPagination(newData);
       showPage(newData, 1);
@@ -103,4 +110,4 @@ studentSearch.addEventListener("keyup", () => {
       studentList.innerHTML = html;
       linkList.innerHTML = "";
    }
-})
+});
