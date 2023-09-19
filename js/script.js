@@ -12,8 +12,8 @@ const studentsPerPage = 9;
 
 /**
  * Function will create and insert/append the elements needed to display a "page" of nine students
- * @param {list} - the array of student objects 
- * @param {number} - the requested page number
+ * @param {array} list - the array of student objects 
+ * @param {number} page - the requested page number
  */
 function showPage(list, page) {
    const start = (page * studentsPerPage) - studentsPerPage;
@@ -39,10 +39,9 @@ function showPage(list, page) {
 };
 
 
-
 /**
  * Function will create and insert/append the elements needed for the pagination buttons
- * @param {list} - the array of student objects 
+ * @param {array} list - the array of student objects 
  */
 function addPagination(list) {
    const numOfPages = Math.ceil(list.length / studentsPerPage);
@@ -57,6 +56,10 @@ function addPagination(list) {
    }
    linkList.querySelector("button").className = "active";
 
+   /**
+    * Event listener that handles click event on "link-list" element
+    * @param {event} e - click event object
+    */
    linkList.addEventListener("click", (e) => {
       const activeButton = linkList.querySelector(".active");
       const buttonClicked = e.target.closest("button");
@@ -70,11 +73,6 @@ function addPagination(list) {
 };
 
 
-// Call functions
-showPage(data, 1);
-addPagination(data);
-
-
 // Create and add search bar in header
 const searchForm = `
          <label for="search" class="student-search">
@@ -86,8 +84,11 @@ const searchForm = `
 header.insertAdjacentHTML("beforeend", searchForm);
 
 
-// Add search functionality & pagination for search results
 const studentSearch = document.querySelector("#search");
+/**
+ * Event listener that handles search input and filters
+ * list in real-time as user types
+ */
 studentSearch.addEventListener("keyup", () => {
    const newData = [];
    const userInput = studentSearch.value.toLowerCase();
@@ -109,3 +110,7 @@ studentSearch.addEventListener("keyup", () => {
       linkList.innerHTML = "";
    }
 });
+
+// Call functions
+showPage(data, 1);
+addPagination(data);
